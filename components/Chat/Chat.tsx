@@ -5,6 +5,8 @@ import {
   Message,
   OpenAIModel,
 } from '@/types';
+import { IconSettings } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import {
   FC,
   MutableRefObject,
@@ -13,14 +15,12 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useTranslation } from 'next-i18next';
 import { ChatInput } from './ChatInput';
 import { ChatLoader } from './ChatLoader';
 import { ChatMessage } from './ChatMessage';
 import { ErrorMessageDiv } from './ErrorMessageDiv';
 import { ModelSelect } from './ModelSelect';
 import { SystemPrompt } from './SystemPrompt';
-import { IconSettings } from "@tabler/icons-react";
 
 interface Props {
   conversation: Conversation;
@@ -158,21 +158,30 @@ export const Chat: FC<Props> = ({
               </>
             ) : (
               <>
-              <div className="flex justify-center border border-b-neutral-300 bg-neutral-100 py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200">
-                {t('Model')}: {conversation.model.name}
-                <IconSettings className="ml-2" onClick={handleSettings} size={21}/>
-              </div>
-              {showSettings && (
-                <div className="flex flex-col mx-auto pt-8 space-y-10 w-[200px] sm:w-[300px]">
-                  <div className="flex flex-col h-full space-y-4 border p-2 rounded border-neutral-500">
-                    <ModelSelect
-                          model={conversation.model}
-                          models={models}
-                          onModelChange={(model) => onUpdateConversation(conversation, { key: "model", value: model })}
-                        />
-                  </div>
+                <div className="flex justify-center border border-b-neutral-300 bg-neutral-100 py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200">
+                  {t('Model')}: {conversation.model.name}
+                  <IconSettings
+                    className="ml-2 cursor-pointer hover:opacity-50"
+                    onClick={handleSettings}
+                    size={18}
+                  />
                 </div>
-              )}
+                {showSettings && (
+                  <div className="mx-auto flex w-[200px] flex-col space-y-10 pt-8 sm:w-[300px]">
+                    <div className="flex h-full flex-col space-y-4 rounded border border-neutral-500 p-2">
+                      <ModelSelect
+                        model={conversation.model}
+                        models={models}
+                        onModelChange={(model) =>
+                          onUpdateConversation(conversation, {
+                            key: 'model',
+                            value: model,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
 
                 {conversation.messages.map((message, index) => (
                   <ChatMessage
